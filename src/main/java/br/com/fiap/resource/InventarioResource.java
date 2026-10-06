@@ -16,7 +16,7 @@ public class InventarioResource {
 
     public ResponseEntity<?> save(@RequestBody InventarioTO inventario) {
         try {
-            inventarioBO.save(inventario);
+            InventarioTO resultado = inventarioBO.save(inventario);
             return ResponseEntity.status(HttpStatus.CREATED).body(inventario);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar");
