@@ -1,7 +1,7 @@
 package br.com.fiap.to;
 
 public class ItemTO {
-    private int id;
+    private Lo id;
     private String nome;
     private String modelo;
     private int valorPontos;
