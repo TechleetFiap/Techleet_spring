@@ -18,10 +18,15 @@ public class UsuarioDAO {
            if (rs != null) {
                while (rs.next()) {
                    UsuarioTO usuario = new UsuarioTO();
-                   usuario.setId(rs.getLong("id"));
+                   usuario.setId(rs.getLong("id_usuario"));
                    usuario.setNome(rs.getString("nome"));
                    usuario.setEmail(rs.getString("email"));
                    usuario.setSenha(rs.getString("senha"));
+                   Date dataNascimento = rs.getDate("data_nascimento");
+                   if (dataNascimento != null) {
+                       usuario.setDataNascimento(dataNascimento.toLocalDate());
+                   }
+                   usuario.setPontos(rs.getInt("pontos"));
                    usuarios.add(usuario);
                }
                } else {
@@ -37,15 +42,20 @@ public class UsuarioDAO {
 
     public UsuarioTO findById(Long id) {
         UsuarioTO usuario = new UsuarioTO();
-        String sql = "select * from USUARIOS where id = ?";
+        String sql = "select * from USUARIOS where id_usuario = ?";
         try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)){
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                usuario.setId(rs.getLong("id"));
+                usuario.setId(rs.getLong("id_usuario"));
                 usuario.setNome(rs.getString("nome"));
                 usuario.setEmail(rs.getString("email"));
                 usuario.setSenha(rs.getString("senha"));
+                Date dataNascimento = rs.getDate("data_nascimento");
+                if (dataNascimento != null) {
+                    usuario.setDataNascimento(dataNascimento.toLocalDate());
+                }
+                usuario.setPontos(rs.getInt("pontos"));
             } else  {
                 return null;
             }
@@ -80,7 +90,7 @@ public class UsuarioDAO {
     }
 
     public boolean delete(Long id) {
-        String sql = "delete from USUARIOS where id = ?";
+        String sql = "delete from USUARIOS where id_usuario = ?";
         try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)){
             ps.setLong(1, id);
             return ps.executeUpdate() > 0;

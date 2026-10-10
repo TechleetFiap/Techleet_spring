@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping("/techleet/usuario")
 public class UsuarioResource {
 
-    private UsuarioBO usuarioBO;
+    private UsuarioBO usuarioBO = new UsuarioBO();
 
     @PostMapping
     public ResponseEntity<?> save (@RequestBody @Valid UsuarioTO usuario) {
