@@ -9,26 +9,29 @@ public class UsuarioBO {
 
     private UsuarioDAO usuarioDAO;
 
-    public UsuarioTO save (UsuarioTO usuario) {
-        usuarioDAO = new UsuarioDAO();
-
-        return usuarioDAO.save(usuario);
-    }
-
     public ArrayList<UsuarioTO> findAll() {
         usuarioDAO = new UsuarioDAO();
-
-        return usuarioDAO.findall();
+        // aqui se implementa a regra de negocio
+        return usuarioDAO.findAll();
     }
 
     public UsuarioTO findById(Long id) {
         usuarioDAO = new UsuarioDAO();
-
+        // aqui se implementa a regra de negocio
         return usuarioDAO.findById(id);
+    }
+
+
+    public UsuarioTO save (UsuarioTO usuario) {
+        usuarioDAO = new UsuarioDAO();
+        // aqui se implementa a regra de negocio
+
+        return usuarioDAO.save(usuario);
     }
 
     public boolean delete(Long id) {
         usuarioDAO = new UsuarioDAO();
+
         return usuarioDAO.delete(id);
     }
 }
