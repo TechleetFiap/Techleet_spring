@@ -12,13 +12,13 @@ public class AvatarDAO {
                 "values (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
             ps.setString(1, avatar.getNome());
-            ps.setInt(2, avatar.getIdCabelo());
-            ps.setInt(3, avatar.getIdRoupaCimaInt());
-            ps.setInt(4, avatar.getIdRoupaCimaExt());
-            ps.setInt(5, avatar.getIdRoupaBaixo());
-            ps.setInt(6, avatar.getIdCalcado());
-            ps.setInt(7, avatar.getIdAcessorio());
-            ps.setInt(8, avatar.getIdUsuario());
+            ps.setLong(2, avatar.getIdCabelo());
+            ps.setLong(3, avatar.getIdRoupaCimaInt());
+            ps.setLong(4, avatar.getIdRoupaCimaExt());
+            ps.setLong(5, avatar.getIdRoupaBaixo());
+            ps.setLong(6, avatar.getIdCalcado());
+            ps.setLong(7, avatar.getIdAcessorio());
+            ps.setLong(8, avatar.getIdUsuario());
             if (ps.executeUpdate() > 0) {
                 return avatar;
             } else {

@@ -2,6 +2,7 @@ package br.com.fiap.resource;
 
 import br.com.fiap.bo.ItemBO;
 import br.com.fiap.to.ItemTO;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +17,7 @@ public class ItemResource {
     private ItemBO itemBO = new ItemBO();
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody ItemTO item) {
+    public ResponseEntity<?> save(@RequestBody @Valid ItemTO item) {
         try {
             ItemTO resultado = itemBO.save(item);
             if (resultado == null) {

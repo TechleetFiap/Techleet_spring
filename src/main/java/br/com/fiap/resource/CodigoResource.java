@@ -2,6 +2,7 @@ package br.com.fiap.resource;
 
 import br.com.fiap.bo.CodigoBO;
 import br.com.fiap.to.CodigoTO;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +17,7 @@ public class CodigoResource {
     private CodigoBO codigoBO = new CodigoBO();
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody CodigoTO codigo) {
+    public ResponseEntity<?> save(@RequestBody @Valid CodigoTO codigo) {
         try {
             CodigoTO resultado = codigoBO.save(codigo);
             if (resultado == null) {

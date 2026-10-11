@@ -1,16 +1,28 @@
 package br.com.fiap.to;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
+
 public class ItemTO {
-    private int id;
+    private Long id;
+    @NotBlank
+    @Size(max = 80)
     private String nome;
+    @NotBlank
+    @Pattern(regexp = "CABELO|ROUPA DE CIMA INTERNA|ROUPA DE CIMA EXTERNA|ROUPA DE BAIXO|CALCADO|ACESSORIO")
     private String modelo;
+    @PositiveOrZero
     private Integer valorPontos;
+    @NotBlank
+    @Pattern(regexp = "NORMAL|EXCLUSIVO")
     private String tipo;
 
     public ItemTO() {
     }
 
-    public ItemTO(int id, String nome, String modelo, Integer valorPontos, String tipo) {
+    public ItemTO(Long id, String nome, String modelo, Integer valorPontos, String tipo) {
         this.id = id;
         this.nome = nome;
         this.modelo = modelo;
@@ -24,11 +36,11 @@ public class ItemTO {
                 && this.modelo.equalsIgnoreCase(modeloDesejado);
     }
 
-    public int getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -1,21 +1,32 @@
 package br.com.fiap.to;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDate;
 
 public class CodigoTO {
 
-    private int id;
+    private Long id;
+    @NotBlank
+    @Size(max = 20)
     private String codigoResgate;
+    @NotNull
     private LocalDate dataValidade;
+    @Pattern(regexp = "DISPONIVEL|RESGATADO")
     private String status;
     private LocalDate dataResgate;
-    private int idItem;
-    private int idParceria;
+    @NotNull
+    private Long idItem;
+    @NotNull
+    private Long idParceria;
 
     public CodigoTO() {
     }
 
-    public CodigoTO(int id, String codigoResgate, LocalDate dataValidade, String status, LocalDate dataResgate, int idItem, int idParceria) {
+    public CodigoTO(Long id, String codigoResgate, LocalDate dataValidade, String status, LocalDate dataResgate, Long idItem, Long idParceria) {
         this.id = id;
         this.codigoResgate = codigoResgate;
         this.dataValidade = dataValidade;
@@ -25,11 +36,11 @@ public class CodigoTO {
         this.idParceria = idParceria;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -65,19 +76,19 @@ public class CodigoTO {
         this.dataResgate = dataResgate;
     }
 
-    public int getIdItem() {
+    public Long getIdItem() {
         return idItem;
     }
 
-    public void setIdItem(int idItem) {
+    public void setIdItem(Long idItem) {
         this.idItem = idItem;
     }
 
-    public int getIdParceria() {
+    public Long getIdParceria() {
         return idParceria;
     }
 
-    public void setIdParceria(int idParceria) {
+    public void setIdParceria(Long idParceria) {
         this.idParceria = idParceria;
     }
 }

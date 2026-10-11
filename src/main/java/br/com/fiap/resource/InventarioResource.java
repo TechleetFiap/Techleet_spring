@@ -2,6 +2,7 @@ package br.com.fiap.resource;
 
 import br.com.fiap.bo.InventarioBO;
 import br.com.fiap.to.InventarioTO;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +17,7 @@ public class InventarioResource {
     private InventarioBO inventarioBO = new InventarioBO();
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody InventarioTO inventario) {
+    public ResponseEntity<?> save(@RequestBody @Valid InventarioTO inventario) {
         try {
             InventarioTO resultado = inventarioBO.save(inventario);
             if (resultado == null) {

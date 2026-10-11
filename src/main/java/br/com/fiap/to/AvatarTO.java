@@ -1,21 +1,34 @@
 package br.com.fiap.to;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 public class AvatarTO {
 
-    private int id;
+    private Long id;
+    @NotBlank
+    @Size(max = 50)
     private String nome;
-    private int idCabelo;
-    private int idRoupaCimaInt;
-    private int idRoupaCimaExt;
-    private int idRoupaBaixo;
-    private int idCalcado;
-    private int idAcessorio;
-    private int idUsuario;
+    @NotNull
+    private Long idCabelo;
+    @NotNull
+    private Long idRoupaCimaInt;
+    @NotNull
+    private Long idRoupaCimaExt;
+    @NotNull
+    private Long idRoupaBaixo;
+    @NotNull
+    private Long idCalcado;
+    @NotNull
+    private Long idAcessorio;
+    @NotNull
+    private Long idUsuario;
 
     public AvatarTO() {
     }
 
-    public AvatarTO(int id, String nome, int idCabelo, int idRoupaCimaInt, int idRoupaCimaExt, int idRoupaBaixo, int idCalcado, int idAcessorio, int idUsuario) {
+    public AvatarTO(Long id, String nome, Long idCabelo, Long idRoupaCimaInt, Long idRoupaCimaExt, Long idRoupaBaixo, Long idCalcado, Long idAcessorio, Long idUsuario) {
         this.id = id;
         this.nome = nome;
         this.idCabelo = idCabelo;
@@ -27,11 +40,11 @@ public class AvatarTO {
         this.idUsuario = idUsuario;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -43,59 +56,59 @@ public class AvatarTO {
         this.nome = nome;
     }
 
-    public int getIdCabelo() {
+    public Long getIdCabelo() {
         return idCabelo;
     }
 
-    public void setIdCabelo(int idCabelo) {
+    public void setIdCabelo(Long idCabelo) {
         this.idCabelo = idCabelo;
     }
 
-    public int getIdRoupaCimaInt() {
+    public Long getIdRoupaCimaInt() {
         return idRoupaCimaInt;
     }
 
-    public void setIdRoupaCimaInt(int idRoupaCimaInt) {
+    public void setIdRoupaCimaInt(Long idRoupaCimaInt) {
         this.idRoupaCimaInt = idRoupaCimaInt;
     }
 
-    public int getIdRoupaCimaExt() {
+    public Long getIdRoupaCimaExt() {
         return idRoupaCimaExt;
     }
 
-    public void setIdRoupaCimaExt(int idRoupaCimaExt) {
+    public void setIdRoupaCimaExt(Long idRoupaCimaExt) {
         this.idRoupaCimaExt = idRoupaCimaExt;
     }
 
-    public int getIdRoupaBaixo() {
+    public Long getIdRoupaBaixo() {
         return idRoupaBaixo;
     }
 
-    public void setIdRoupaBaixo(int idRoupaBaixo) {
+    public void setIdRoupaBaixo(Long idRoupaBaixo) {
         this.idRoupaBaixo = idRoupaBaixo;
     }
 
-    public int getIdCalcado() {
+    public Long getIdCalcado() {
         return idCalcado;
     }
 
-    public void setIdCalcado(int idCalcado) {
+    public void setIdCalcado(Long idCalcado) {
         this.idCalcado = idCalcado;
     }
 
-    public int getIdAcessorio() {
+    public Long getIdAcessorio() {
         return idAcessorio;
     }
 
-    public void setIdAcessorio(int idAcessorio) {
+    public void setIdAcessorio(Long idAcessorio) {
         this.idAcessorio = idAcessorio;
     }
 
-    public int getIdUsuario() {
+    public Long getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(int idUsuario) {
+    public void setIdUsuario(Long idUsuario) {
         this.idUsuario = idUsuario;
     }
 }

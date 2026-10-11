@@ -1,18 +1,26 @@
 package br.com.fiap.to;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+
 import java.time.LocalDate;
 
 public class InventarioTO {
-    private int id;
-    private int idUsuario;
-    private int idItem;
+    private Long id;
+    @NotNull
+    private Long idUsuario;
+    @NotNull
+    private Long idItem;
+    @NotBlank
+    @Pattern(regexp = "COMPRA|RESGATE")
     private String origem;
     private LocalDate dataAquisicao;
 
     public InventarioTO() {
     }
 
-    public InventarioTO(int id, int idUsuario, int idItem, String origem, LocalDate dataAquisicao) {
+    public InventarioTO(Long id, Long idUsuario, Long idItem, String origem, LocalDate dataAquisicao) {
         this.id = id;
         this.idUsuario = idUsuario;
         this.idItem = idItem;
@@ -20,27 +28,27 @@ public class InventarioTO {
         this.dataAquisicao = dataAquisicao;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public int getIdUsuario() {
+    public Long getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(int idUsuario) {
+    public void setIdUsuario(Long idUsuario) {
         this.idUsuario = idUsuario;
     }
 
-    public int getIdItem() {
+    public Long getIdItem() {
         return idItem;
     }
 
-    public void setIdItem(int idItem) {
+    public void setIdItem(Long idItem) {
         this.idItem = idItem;
     }
 

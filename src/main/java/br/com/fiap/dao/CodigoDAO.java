@@ -18,8 +18,8 @@ public class CodigoDAO {
                     ? Date.valueOf(codigo.getDataValidade()) : null);
             ps.setDate(4, codigo.getDataResgate() != null
                     ? Date.valueOf(codigo.getDataResgate()) : null);
-            ps.setInt(5, codigo.getIdItem());
-            ps.setInt(6, codigo.getIdParceria());
+            ps.setLong(5, codigo.getIdItem());
+            ps.setLong(6, codigo.getIdParceria());
             if (ps.executeUpdate() > 0) {
                 return codigo;
             } else {

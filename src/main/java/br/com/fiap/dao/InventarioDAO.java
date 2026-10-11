@@ -12,8 +12,8 @@ public class InventarioDAO {
         String sql = "insert into INVENTARIO (id_usuario, id_item, origem, "
                 + "data_aquisicao) values (?, ?, ?, NVL(?, SYSDATE))";
         try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
-            ps.setInt(1, inventario.getIdUsuario());
-            ps.setInt(2, inventario.getIdItem());
+            ps.setLong(1, inventario.getIdUsuario());
+            ps.setLong(2, inventario.getIdItem());
             ps.setString(3, inventario.getOrigem());
             ps.setDate(4, inventario.getDataAquisicao() != null
                     ? Date.valueOf(inventario.getDataAquisicao()) : null);
