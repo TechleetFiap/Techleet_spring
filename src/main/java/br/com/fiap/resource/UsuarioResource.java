@@ -36,7 +36,7 @@ public class UsuarioResource {
     }
 
     @PostMapping
-    public ResponseEntity<?> save (@RequestBody @Valid UsuarioTO usuario) {
+    public ResponseEntity<?> save(@RequestBody @Valid UsuarioTO usuario) {
         try {
             UsuarioTO resultado = usuarioBO.save(usuario);
             if (resultado == null) {
@@ -49,9 +49,9 @@ public class UsuarioResource {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete (@PathVariable Long id) {
+    public ResponseEntity<String> delete(@PathVariable Long id) {
         if (usuarioBO.delete(id)) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Usuario deletado com sucesso");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario não encontrado");
         }

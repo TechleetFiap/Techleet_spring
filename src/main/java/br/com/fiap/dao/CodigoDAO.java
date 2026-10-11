@@ -8,19 +8,18 @@ import java.sql.SQLException;
 
 public class CodigoDAO {
 
-    public CodigoTO save (CodigoTO codigo) {
-        String sql = "insert into CODIGOS(id_codigo, codigo_resgate, status, data_validade, "
-                + "data_resgate, id_item, id_parceria) values (?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)){
-            ps.setInt(1, codigo.getId());
-            ps.setString(2, codigo.getCodigoResgate());
-            ps.setString(3, codigo.getStatus());
-            ps.setDate(4, codigo.getDataValidade() != null
+    public CodigoTO save(CodigoTO codigo) {
+        String sql = "insert into CODIGOS (codigo_resgate, status, data_validade, "
+                + "data_resgate, id_item, id_parceria) values (?, NVL(?, 'DISPONIVEL'), ?, ?, ?, ?)";
+        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
+            ps.setString(1, codigo.getCodigoResgate());
+            ps.setString(2, codigo.getStatus());
+            ps.setDate(3, codigo.getDataValidade() != null
                     ? Date.valueOf(codigo.getDataValidade()) : null);
-            ps.setDate(5, codigo.getDataResgate() != null
+            ps.setDate(4, codigo.getDataResgate() != null
                     ? Date.valueOf(codigo.getDataResgate()) : null);
-            ps.setInt(6, codigo.getIdItem());
-            ps.setInt(7, codigo.getIdParceria());
+            ps.setInt(5, codigo.getIdItem());
+            ps.setInt(6, codigo.getIdParceria());
             if (ps.executeUpdate() > 0) {
                 return codigo;
             } else {

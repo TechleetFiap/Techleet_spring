@@ -4,21 +4,21 @@ import br.com.fiap.to.ItemTO;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 
 public class ItemDAO {
 
     public ItemTO save(ItemTO item) {
-        String sql = "insert into ITENS(id_item, nome, modelo_item, valor_pontos, tipo) "
-                + "values (?, ?, ?, ?, ?)";
+        String sql = "insert into ITENS (nome, modelo_item, valor_pontos, tipo) "
+                + "values (?, ?, ?, ?)";
         try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
-            ps.setInt(1, item.getId());
-            ps.setString(2, item.getNome());
-            ps.setString(3, item.getModelo());
-            ps.setInt(4, item.getValorPontos());
-            ps.setString(5, item.getTipo());
+            ps.setString(1, item.getNome());
+            ps.setString(2, item.getModelo());
+            ps.setObject(3, item.getValorPontos(), Types.INTEGER);
+            ps.setString(4, item.getTipo());
             if (ps.executeUpdate() > 0) {
                 return item;
-            } else  {
+            } else {
                 return null;
             }
         } catch (SQLException e) {

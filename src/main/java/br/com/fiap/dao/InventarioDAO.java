@@ -8,19 +8,18 @@ import java.sql.SQLException;
 
 public class InventarioDAO {
 
-    public InventarioTO save (InventarioTO inventario) {
-        String sql = "insert into INVENTARIO(id_inventario, id_usuario, id_item, origem, "
-                + "data_aquisicao) values (?, ?, ?, ?, ?)";
+    public InventarioTO save(InventarioTO inventario) {
+        String sql = "insert into INVENTARIO (id_usuario, id_item, origem, "
+                + "data_aquisicao) values (?, ?, ?, NVL(?, SYSDATE))";
         try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
-            ps.setInt(1, inventario.getId());
-            ps.setInt(2, inventario.getIdUsuario());
-            ps.setInt(3, inventario.getIdItem());
-            ps.setString(4, inventario.getOrigem());
-            ps.setDate(5, inventario.getDataAquisicao() != null
+            ps.setInt(1, inventario.getIdUsuario());
+            ps.setInt(2, inventario.getIdItem());
+            ps.setString(3, inventario.getOrigem());
+            ps.setDate(4, inventario.getDataAquisicao() != null
                     ? Date.valueOf(inventario.getDataAquisicao()) : null);
             if (ps.executeUpdate() > 0) {
                 return inventario;
-            } else  {
+            } else {
                 return null;
             }
         } catch (SQLException e) {

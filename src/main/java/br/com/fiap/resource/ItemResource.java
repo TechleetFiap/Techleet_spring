@@ -13,13 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/techleet/item")
 public class ItemResource {
 
-    private ItemBO itemBO;
+    private ItemBO itemBO = new ItemBO();
 
     @PostMapping
     public ResponseEntity<?> save(@RequestBody ItemTO item) {
         try {
             ItemTO resultado = itemBO.save(item);
-            return ResponseEntity.status(HttpStatus.CREATED).body(item);
+            if (resultado == null) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao salvar item!");
+            }
+            return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Erro ao salvar");
         }

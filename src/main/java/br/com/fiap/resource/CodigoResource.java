@@ -13,13 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/techleet/codigo")
 public class CodigoResource {
 
-    private CodigoBO codigoBO;
+    private CodigoBO codigoBO = new CodigoBO();
 
     @PostMapping
-    public ResponseEntity<?> save (@RequestBody CodigoTO codigo) {
+    public ResponseEntity<?> save(@RequestBody CodigoTO codigo) {
         try {
             CodigoTO resultado = codigoBO.save(codigo);
-            return ResponseEntity.status(HttpStatus.CREATED).body(codigo);
+            if (resultado == null) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao salvar codigo!");
+            }
+            return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar codigo");
         }

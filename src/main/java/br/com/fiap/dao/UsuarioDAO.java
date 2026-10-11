@@ -12,7 +12,7 @@ public class UsuarioDAO {
     public ArrayList<UsuarioTO> findAll() {
         ArrayList<UsuarioTO> usuarios = new ArrayList<>();
         String sql = "select * from USUARIOS order by id_usuario";
-        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)){
+        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
             if (rs != null) {
                 while (rs.next()) {
@@ -29,7 +29,8 @@ public class UsuarioDAO {
                 return null;
             }
         } catch (SQLException e) {
-            System.out.println("Erro ao salvar: " + e.getMessage());
+            System.out.println("Erro ao listar: " + e.getMessage());
+            return null;
         } finally {
             ConnectionFactory.closeConnection();
         }
@@ -40,7 +41,7 @@ public class UsuarioDAO {
     public UsuarioTO findById(Long id) {
         UsuarioTO usuario = new UsuarioTO();
         String sql = "select * from USUARIOS where id_usuario = ?";
-        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)){
+        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -54,7 +55,8 @@ public class UsuarioDAO {
                 return null;
             }
         } catch (SQLException e) {
-            System.out.println("Erro ao salvar: " + e.getMessage());
+            System.out.println("Erro ao buscar: " + e.getMessage());
+            return null;
         } finally {
             ConnectionFactory.closeConnection();
         }
@@ -63,8 +65,7 @@ public class UsuarioDAO {
 
     public UsuarioTO save(UsuarioTO usuario) {
         String sql = "insert into USUARIOS (nome, email, senha, data_nascimento, pontos) values(?, ?, ?, ?, ?)";
-        try(PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql))
-        {
+        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
             ps.setString(1, usuario.getNome());
             ps.setString(2, usuario.getEmail());
             ps.setString(3, usuario.getSenha());
@@ -85,7 +86,7 @@ public class UsuarioDAO {
 
     public boolean delete(Long id) {
         String sql = "delete from USUARIOS where id_usuario = ?";
-        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)){
+        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
             ps.setLong(1, id);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {

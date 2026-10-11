@@ -4,13 +4,13 @@ public class ItemTO {
     private int id;
     private String nome;
     private String modelo;
-    private int valorPontos;
+    private Integer valorPontos;
     private String tipo;
 
     public ItemTO() {
     }
 
-    public ItemTO(int id, String nome, String modelo, int valorPontos, String tipo) {
+    public ItemTO(int id, String nome, String modelo, Integer valorPontos, String tipo) {
         this.id = id;
         this.nome = nome;
         this.modelo = modelo;
@@ -48,11 +48,11 @@ public class ItemTO {
         this.modelo = modelo;
     }
 
-    public int getValorPontos() {
+    public Integer getValorPontos() {
         return this.valorPontos;
     }
 
-    public void setValorPontos(int valorPontos) {
+    public void setValorPontos(Integer valorPontos) {
         this.valorPontos = valorPontos;
     }
 

@@ -10,13 +10,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/techleet/avatar")
 public class AvatarResource {
 
-    private AvatarBO avatarBO;
+    private AvatarBO avatarBO = new AvatarBO();
 
     @PostMapping
-    public ResponseEntity<?> save (@RequestBody AvatarTO avatar) {
+    public ResponseEntity<?> save(@RequestBody AvatarTO avatar) {
         try {
             AvatarTO resultado = avatarBO.save(avatar);
-            return ResponseEntity.status(HttpStatus.CREATED).body(avatar);
+            if (resultado == null) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao salvar avatar!");
+            }
+            return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar avatar");
         }

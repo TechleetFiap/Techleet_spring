@@ -2,7 +2,6 @@ package br.com.fiap.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLDataException;
 import java.sql.SQLException;
 
 public class ConnectionFactory {
@@ -11,7 +10,7 @@ public class ConnectionFactory {
 
     public static void closeConnection() {
         try {
-            if (!connection.isClosed()) {
+            if (connection != null && !connection.isClosed()) {
                 connection.close();
             }
         } catch (Exception e) {
