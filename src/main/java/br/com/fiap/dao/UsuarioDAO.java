@@ -109,6 +109,21 @@ public class UsuarioDAO {
         return null;
     }
 
+    public boolean alterarPontos(Long id, int quantidade) {
+        String sql = "update USUARIOS set pontos = pontos + ? where id_usuario = ? and pontos + ? >= 0";
+        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
+            ps.setInt(1, quantidade);
+            ps.setLong(2, id);
+            ps.setInt(3, quantidade);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("Erro ao alterar pontos: " + e.getMessage());
+        } finally {
+            ConnectionFactory.closeConnection();
+        }
+        return false;
+    }
+
     public boolean delete(Long id) {
         String sql = "delete from USUARIOS where id_usuario = ?";
         try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
