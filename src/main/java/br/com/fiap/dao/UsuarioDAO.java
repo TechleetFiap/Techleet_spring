@@ -63,6 +63,31 @@ public class UsuarioDAO {
         return usuario;
     }
 
+    public UsuarioTO findByEmail(String email) {
+        UsuarioTO usuario = new UsuarioTO();
+        String sql = "select * from USUARIOS where lower(email) = lower(?)";
+        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                usuario.setId(rs.getLong("id_usuario"));
+                usuario.setNome(rs.getString("nome"));
+                usuario.setEmail(rs.getString("email"));
+                usuario.setSenha(rs.getString("senha"));
+                usuario.setDataNascimento(rs.getDate("data_nascimento").toLocalDate());
+                usuario.setPontos(rs.getInt("pontos"));
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar por e-mail: " + e.getMessage());
+            throw new RuntimeException("Erro ao consultar usuário para login.", e);
+        } finally {
+            ConnectionFactory.closeConnection();
+        }
+        return usuario;
+    }
+
     public UsuarioTO save(UsuarioTO usuario) {
         String sql = "insert into USUARIOS (nome, email, senha, data_nascimento, pontos) values(?, ?, ?, ?, ?)";
         try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {

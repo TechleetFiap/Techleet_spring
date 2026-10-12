@@ -48,6 +48,19 @@ public class UsuarioResource {
         }
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody UsuarioTO login) {
+        try {
+            UsuarioTO usuario = usuarioBO.login(login);
+            if (usuario == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("E-mail ou senha inválidos.");
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(usuario);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao realizar login.");
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         if (usuarioBO.delete(id)) {

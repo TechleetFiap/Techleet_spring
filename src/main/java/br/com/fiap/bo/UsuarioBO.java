@@ -24,7 +24,7 @@ public class UsuarioBO {
 
     public UsuarioTO save (UsuarioTO usuario) {
         usuarioDAO = new UsuarioDAO();
-        usuario.setPontos(0);
+        usuario.setPontos(100);
 
         ArrayList<UsuarioTO> usuarios = usuarioDAO.findAll();
         if (usuarios == null) {
@@ -37,6 +37,20 @@ public class UsuarioBO {
         }
 
         return usuarioDAO.save(usuario);
+    }
+
+    public UsuarioTO login(UsuarioTO login) {
+        if (login == null || login.getEmail() == null || login.getEmail().isBlank()
+                || login.getSenha() == null || login.getSenha().isBlank()) {
+            return null;
+        }
+
+        usuarioDAO = new UsuarioDAO();
+        UsuarioTO usuario = usuarioDAO.findByEmail(login.getEmail());
+        if (usuario == null || !usuario.getSenha().equals(login.getSenha())) {
+            return null;
+        }
+        return usuario;
     }
 
     public boolean delete(Long id) {
