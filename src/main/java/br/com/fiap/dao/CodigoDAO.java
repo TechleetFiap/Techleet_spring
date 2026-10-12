@@ -4,9 +4,66 @@ import br.com.fiap.to.CodigoTO;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import java.util.ArrayList;
+
 public class CodigoDAO {
+
+    public ArrayList<CodigoTO> findAll() {
+        ArrayList<CodigoTO> codigos = new ArrayList<>();
+        String sql = "select * from CODIGOS order by id_codigo";
+        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            if (rs != null) {
+                while (rs.next()) {
+                    CodigoTO codigo = new CodigoTO();
+                    codigo.setId(rs.getLong("id_codigo"));
+                    codigo.setCodigoResgate(rs.getString("codigo_resgate"));
+                    codigo.setDataValidade(rs.getDate("data_validade").toLocalDate());
+                    codigo.setStatus(rs.getString("status"));
+                    codigo.setDataResgate(rs.getDate("data_resgate") != null ? rs.getDate("data_resgate").toLocalDate() : null);
+                    codigo.setIdItem(rs.getLong("id_item"));
+                    codigo.setIdParceria(rs.getLong("id_parceria"));
+                    codigos.add(codigo);
+                }
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar: " + e.getMessage());
+        } finally {
+            ConnectionFactory.closeConnection();
+        }
+
+        return codigos;
+    }
+
+    public CodigoTO findById(Long id) {
+        CodigoTO codigo = new CodigoTO();
+        String sql = "select * from CODIGOS where id_codigo = ?";
+        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
+            ps.setLong(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                codigo.setId(rs.getLong("id_codigo"));
+                codigo.setCodigoResgate(rs.getString("codigo_resgate"));
+                codigo.setDataValidade(rs.getDate("data_validade").toLocalDate());
+                codigo.setStatus(rs.getString("status"));
+                codigo.setDataResgate(rs.getDate("data_resgate") != null ? rs.getDate("data_resgate").toLocalDate() : null);
+                codigo.setIdItem(rs.getLong("id_item"));
+                codigo.setIdParceria(rs.getLong("id_parceria"));
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar: " + e.getMessage());
+        } finally {
+            ConnectionFactory.closeConnection();
+        }
+        return codigo;
+    }
 
     public CodigoTO save(CodigoTO codigo) {
         String sql = "insert into CODIGOS (codigo_resgate, status, data_validade, "
@@ -31,5 +88,18 @@ public class CodigoDAO {
             ConnectionFactory.closeConnection();
         }
         return null;
+    }
+
+    public boolean delete(Long id) {
+        String sql = "delete from CODIGOS where id_codigo = ?";
+        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
+            ps.setLong(1, id);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("Erro ao excluir: " + e.getMessage());
+        } finally {
+            ConnectionFactory.closeConnection();
+        }
+        return false;
     }
 }
