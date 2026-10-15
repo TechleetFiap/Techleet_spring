@@ -29,12 +29,12 @@ public class UsuarioTO {
     @PastOrPresent
     private LocalDate dataNascimento;
     @PositiveOrZero
-    private int pontos;
+    private Integer pontos;
 
     public UsuarioTO() {
     }
 
-    public UsuarioTO(Long id, String nome, String email, String senha, LocalDate dataNascimento, int pontos) {
+    public UsuarioTO(Long id, String nome, String email, String senha, LocalDate dataNascimento, Integer pontos) {
         this.id = id;
         this.nome = nome;
         this.email = email;
@@ -83,11 +83,11 @@ public class UsuarioTO {
         this.dataNascimento = dataNascimento;
     }
 
-    public int getPontos() {
+    public Integer getPontos() {
         return pontos;
     }
 
-    public void setPontos(int pontos) {
+    public void setPontos(Integer pontos) {
         this.pontos = pontos;
     }
 }
