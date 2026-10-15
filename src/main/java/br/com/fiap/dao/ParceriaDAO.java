@@ -90,6 +90,31 @@ public class ParceriaDAO {
         return null;
     }
 
+    public ParceriaTO update(ParceriaTO parceria) {
+        String sql = "update PARCERIAS set tipo=?, nome=?, status=?, custo_mensal=?, data_inicio=?, data_fim=? where id_parceria=?";
+        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
+            ps.setString(1, parceria.getTipo());
+            ps.setString(2, parceria.getNome());
+            ps.setString(3, parceria.getStatus());
+            ps.setBigDecimal(4, parceria.getCustoMensal());
+            ps.setDate(5, parceria.getDataInicio() != null
+                    ? Date.valueOf(parceria.getDataInicio()) : null);
+            ps.setDate(6, parceria.getDataFim() != null
+                    ? Date.valueOf(parceria.getDataFim()) : null);
+            ps.setLong(7, parceria.getId());
+            if (ps.executeUpdate() > 0) {
+                return parceria;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao fazer o update: " + e.getMessage());
+        } finally {
+            ConnectionFactory.closeConnection();
+        }
+        return null;
+    }
+
     public boolean delete(Long id) {
         String sql = "delete from PARCERIAS where id_parceria = ?";
         try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {

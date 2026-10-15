@@ -28,6 +28,12 @@ public class CodigoBO {
         return codigoDAO.save(codigo);
     }
 
+    public CodigoTO update(CodigoTO codigo) {
+        codigoDAO = new CodigoDAO();
+
+        return codigoDAO.update(codigo);
+    }
+
     public boolean delete(Long id) {
         codigoDAO = new CodigoDAO();
 

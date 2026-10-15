@@ -28,6 +28,12 @@ public class AvatarBO {
         return avatarDAO.save(avatar);
     }
 
+    public AvatarTO update(AvatarTO avatar) {
+        avatarDAO = new AvatarDAO();
+
+        return avatarDAO.update(avatar);
+    }
+
     public boolean delete(Long id) {
         avatarDAO = new AvatarDAO();
 

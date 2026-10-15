@@ -91,6 +91,32 @@ public class MissaoUsuarioDAO {
         return null;
     }
 
+    public MissaoUsuarioTO update(MissaoUsuarioTO missaoUsuario) {
+        String sql = "update MISSOES_USUARIO set status=?, data_realizacao=?, id_usuario=?, id_missao=?, data_inicio=?, data_fim=? where id_missao_usuario=?";
+        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
+            ps.setString(1, missaoUsuario.getStatus());
+            ps.setDate(2, missaoUsuario.getDataRealizacao() != null
+                    ? Date.valueOf(missaoUsuario.getDataRealizacao()) : null);
+            ps.setLong(3, missaoUsuario.getIdUsuario());
+            ps.setLong(4, missaoUsuario.getIdMissao());
+            ps.setDate(5, missaoUsuario.getDataInicio() != null
+                    ? Date.valueOf(missaoUsuario.getDataInicio()) : null);
+            ps.setDate(6, missaoUsuario.getDataFim() != null
+                    ? Date.valueOf(missaoUsuario.getDataFim()) : null);
+            ps.setLong(7, missaoUsuario.getId());
+            if (ps.executeUpdate() > 0) {
+                return missaoUsuario;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao fazer o update: " + e.getMessage());
+        } finally {
+            ConnectionFactory.closeConnection();
+        }
+        return null;
+    }
+
     public boolean delete(Long id) {
         String sql = "delete from MISSOES_USUARIO where id_missao_usuario = ?";
         try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {

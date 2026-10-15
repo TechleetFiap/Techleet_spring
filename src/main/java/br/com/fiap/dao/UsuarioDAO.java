@@ -124,6 +124,28 @@ public class UsuarioDAO {
         return false;
     }
 
+    public UsuarioTO update(UsuarioTO usuario) {
+        String sql = "update USUARIOS set nome=?, email=?, senha=?, data_nascimento=?, pontos=? where id_usuario=?";
+        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
+            ps.setString(1, usuario.getNome());
+            ps.setString(2, usuario.getEmail());
+            ps.setString(3, usuario.getSenha());
+            ps.setDate(4, Date.valueOf(usuario.getDataNascimento()));
+            ps.setInt(5, usuario.getPontos());
+            ps.setLong(6, usuario.getId());
+            if (ps.executeUpdate() > 0) {
+                return usuario;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao fazer o update: " + e.getMessage());
+        } finally {
+            ConnectionFactory.closeConnection();
+        }
+        return null;
+    }
+
     public boolean delete(Long id) {
         String sql = "delete from USUARIOS where id_usuario = ?";
         try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {

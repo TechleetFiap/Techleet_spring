@@ -80,6 +80,27 @@ public class MissaoDAO {
         return null;
     }
 
+    public MissaoTO update(MissaoTO missao) {
+        String sql = "update MISSOES set titulo=?, descricao=?, pontos=?, tipo=? where id_missao=?";
+        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
+            ps.setString(1, missao.getTitulo());
+            ps.setString(2, missao.getDescricao());
+            ps.setInt(3, missao.getPontos());
+            ps.setString(4, missao.getTipo());
+            ps.setLong(5, missao.getId());
+            if (ps.executeUpdate() > 0) {
+                return missao;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao fazer o update: " + e.getMessage());
+        } finally {
+            ConnectionFactory.closeConnection();
+        }
+        return null;
+    }
+
     public boolean delete(Long id) {
         String sql = "delete from MISSOES where id_missao = ?";
         try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {

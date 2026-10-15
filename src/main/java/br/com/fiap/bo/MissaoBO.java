@@ -29,6 +29,12 @@ public class MissaoBO {
         return missaoDAO.save(missao);
     }
 
+    public MissaoTO update(MissaoTO missao) {
+        missaoDAO = new MissaoDAO();
+
+        return missaoDAO.update(missao);
+    }
+
     public boolean delete(Long id) {
         missaoDAO = new MissaoDAO();
 

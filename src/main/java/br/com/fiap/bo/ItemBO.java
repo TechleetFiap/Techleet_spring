@@ -54,6 +54,12 @@ public class ItemBO {
         return itemDAO.save(itemTO);
     }
 
+    public ItemTO update(ItemTO item) {
+        itemDAO = new ItemDAO();
+
+        return itemDAO.update(item);
+    }
+
     public boolean delete(Long id) {
         itemDAO = new ItemDAO();
 

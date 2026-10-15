@@ -61,6 +61,17 @@ public class UsuarioResource {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update (@PathVariable Long id, @RequestBody UsuarioTO usuario) {
+        try {
+            usuario.setId(id);
+            UsuarioTO resultado = usuarioBO.update(usuario);
+            return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar usuario");
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         if (usuarioBO.delete(id)) {

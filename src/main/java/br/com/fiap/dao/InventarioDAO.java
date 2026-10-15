@@ -84,6 +84,28 @@ public class InventarioDAO {
         return null;
     }
 
+    public InventarioTO update(InventarioTO inventario) {
+        String sql = "update INVENTARIO set id_usuario=?, id_item=?, origem=?, data_aquisicao=? where id_inventario=?";
+        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
+            ps.setLong(1, inventario.getIdUsuario());
+            ps.setLong(2, inventario.getIdItem());
+            ps.setString(3, inventario.getOrigem());
+            ps.setDate(4, inventario.getDataAquisicao() != null
+                    ? Date.valueOf(inventario.getDataAquisicao()) : null);
+            ps.setLong(5, inventario.getId());
+            if (ps.executeUpdate() > 0) {
+                return inventario;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao fazer o update: " + e.getMessage());
+        } finally {
+            ConnectionFactory.closeConnection();
+        }
+        return null;
+    }
+
     public boolean delete(Long id) {
         String sql = "delete from INVENTARIO where id_inventario = ?";
         try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {

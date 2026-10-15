@@ -29,6 +29,12 @@ public class MissaoUsuarioBO {
         return missaoUsuarioDAO.save(missaoUsuario);
     }
 
+    public MissaoUsuarioTO update(MissaoUsuarioTO missaoUsuario) {
+        missaoUsuarioDAO = new MissaoUsuarioDAO();
+
+        return missaoUsuarioDAO.update(missaoUsuario);
+    }
+
     public boolean delete(Long id) {
         missaoUsuarioDAO = new MissaoUsuarioDAO();
 

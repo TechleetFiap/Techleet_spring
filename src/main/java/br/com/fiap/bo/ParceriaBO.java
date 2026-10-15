@@ -29,6 +29,12 @@ public class ParceriaBO {
         return parceriaDAO.save(parceria);
     }
 
+    public ParceriaTO update(ParceriaTO parceria) {
+        parceriaDAO = new ParceriaDAO();
+
+        return parceriaDAO.update(parceria);
+    }
+
     public boolean delete(Long id) {
         parceriaDAO = new ParceriaDAO();
 

@@ -90,6 +90,27 @@ public class ItemDAO {
         return null;
     }
 
+    public ItemTO update(ItemTO item) {
+        String sql = "update ITENS set nome=?, modelo_item=?, valor_pontos=?, tipo=? where id_item=?";
+        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
+            ps.setString(1, item.getNome());
+            ps.setString(2, item.getModelo());
+            ps.setObject(3, item.getValorPontos(), Types.INTEGER);
+            ps.setString(4, item.getTipo());
+            ps.setLong(5, item.getId());
+            if (ps.executeUpdate() > 0) {
+                return item;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao fazer o update: " + e.getMessage());
+        } finally {
+            ConnectionFactory.closeConnection();
+        }
+        return null;
+    }
+
     public boolean delete(Long id) {
         String sql = "delete from ITENS where id_item = ?";
         try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {

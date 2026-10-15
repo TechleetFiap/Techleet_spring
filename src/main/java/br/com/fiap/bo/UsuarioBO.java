@@ -53,6 +53,12 @@ public class UsuarioBO {
         return usuario;
     }
 
+    public UsuarioTO update(UsuarioTO usuario) {
+        usuarioDAO = new UsuarioDAO();
+
+        return usuarioDAO.update(usuario);
+    }
+
     public boolean delete(Long id) {
         usuarioDAO = new UsuarioDAO();
 

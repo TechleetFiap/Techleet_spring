@@ -48,6 +48,17 @@ public class ParceriaResource {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update (@PathVariable Long id, @RequestBody ParceriaTO parceria) {
+        try {
+            parceria.setId(id);
+            ParceriaTO resultado = parceriaBO.update(parceria);
+            return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar parceria");
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         if (parceriaBO.delete(id)) {

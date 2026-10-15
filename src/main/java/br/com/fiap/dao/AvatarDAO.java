@@ -94,6 +94,31 @@ public class AvatarDAO {
         return null;
     }
 
+    public AvatarTO update(AvatarTO avatar) {
+        String sql = "update AVATARES set nome=?, id_cabelo=?, id_roupa_cima_int=?, id_roupa_cima_ext=?, id_roupa_baixo=?, id_calcado=?, id_acessorio=?, id_usuario=? where id_avatar=?";
+        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
+            ps.setString(1, avatar.getNome());
+            ps.setLong(2, avatar.getIdCabelo());
+            ps.setLong(3, avatar.getIdRoupaCimaInt());
+            ps.setLong(4, avatar.getIdRoupaCimaExt());
+            ps.setLong(5, avatar.getIdRoupaBaixo());
+            ps.setLong(6, avatar.getIdCalcado());
+            ps.setLong(7, avatar.getIdAcessorio());
+            ps.setLong(8, avatar.getIdUsuario());
+            ps.setLong(9, avatar.getId());
+            if (ps.executeUpdate() > 0) {
+                return avatar;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao fazer o update: " + e.getMessage());
+        } finally {
+            ConnectionFactory.closeConnection();
+        }
+        return null;
+    }
+
     public boolean delete(Long id) {
         String sql = "delete from AVATARES where id_avatar = ?";
         try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {

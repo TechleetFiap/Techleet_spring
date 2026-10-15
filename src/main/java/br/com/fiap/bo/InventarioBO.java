@@ -79,6 +79,12 @@ public class InventarioBO {
         return inventarioDAO.save(inventarioTO);
     }
 
+    public InventarioTO update(InventarioTO inventario) {
+        inventarioDAO = new InventarioDAO();
+
+        return inventarioDAO.update(inventario);
+    }
+
     public boolean delete(Long id) {
         inventarioDAO = new InventarioDAO();
 

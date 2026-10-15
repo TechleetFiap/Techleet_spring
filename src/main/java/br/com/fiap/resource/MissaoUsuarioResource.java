@@ -48,6 +48,17 @@ public class MissaoUsuarioResource {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update (@PathVariable Long id, @RequestBody MissaoUsuarioTO missaoUsuario) {
+        try {
+            missaoUsuario.setId(id);
+            MissaoUsuarioTO resultado = missaoUsuarioBO.update(missaoUsuario);
+            return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar missaoUsuario");
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         if (missaoUsuarioBO.delete(id)) {

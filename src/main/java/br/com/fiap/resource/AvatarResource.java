@@ -49,6 +49,17 @@ public class AvatarResource {
     }
 
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update (@PathVariable Long id, @RequestBody AvatarTO avatar) {
+        try {
+            avatar.setId(id);
+            AvatarTO resultado = avatarBO.update(avatar);
+            return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar avatar");
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         if (avatarBO.delete(id)) {
