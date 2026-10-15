@@ -40,7 +40,7 @@ public class AvatarResource {
         try {
             AvatarTO resultado = avatarBO.save(avatar);
             if (resultado == null) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao salvar avatar!");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar avatar!");
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
         } catch (Exception e) {
@@ -54,6 +54,9 @@ public class AvatarResource {
         try {
             avatar.setId(id);
             AvatarTO resultado = avatarBO.update(avatar);
+            if (resultado == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar avatar");
+            }
             return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar avatar");

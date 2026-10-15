@@ -34,7 +34,6 @@ public class ItemDAO {
             }
         } catch (SQLException e) {
             System.out.println("Erro ao listar: " + e.getMessage());
-            return null;
         } finally {
             ConnectionFactory.closeConnection();
         }
@@ -62,7 +61,6 @@ public class ItemDAO {
             }
         } catch (SQLException e) {
             System.out.println("Erro ao buscar: " + e.getMessage());
-            return null;
         } finally {
             ConnectionFactory.closeConnection();
         }

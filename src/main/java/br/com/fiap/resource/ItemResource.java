@@ -47,7 +47,7 @@ public class ItemResource {
         try {
             ItemTO resultado = itemBO.save(item);
             if (resultado == null) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao salvar item!");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar item!");
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
         } catch (Exception e) {
@@ -60,6 +60,9 @@ public class ItemResource {
         try {
             item.setId(id);
             ItemTO resultado = itemBO.update(item);
+            if (resultado == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar item");
+            }
             return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar item");

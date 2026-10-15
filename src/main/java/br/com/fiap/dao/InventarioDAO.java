@@ -31,7 +31,6 @@ public class InventarioDAO {
             }
         } catch (SQLException e) {
             System.out.println("Erro ao listar: " + e.getMessage());
-            return null;
         } finally {
             ConnectionFactory.closeConnection();
         }

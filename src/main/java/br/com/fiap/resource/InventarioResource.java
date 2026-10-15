@@ -47,7 +47,7 @@ public class InventarioResource {
         try {
             InventarioTO resultado = inventarioBO.save(inventario);
             if (resultado == null) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao salvar inventario!");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar inventario!");
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
         } catch (Exception e) {
@@ -60,6 +60,9 @@ public class InventarioResource {
         try {
             inventario.setId(id);
             InventarioTO resultado = inventarioBO.update(inventario);
+            if (resultado == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar inventario");
+            }
             return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar inventario");

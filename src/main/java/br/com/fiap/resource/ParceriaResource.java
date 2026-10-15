@@ -40,7 +40,7 @@ public class ParceriaResource {
         try {
             ParceriaTO resultado = parceriaBO.save(parceria);
             if (resultado == null) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao salvar parceria!");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar parceria!");
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(parceria);
         } catch (Exception e) {
@@ -53,6 +53,9 @@ public class ParceriaResource {
         try {
             parceria.setId(id);
             ParceriaTO resultado = parceriaBO.update(parceria);
+            if (resultado == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar parceria");
+            }
             return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar parceria");

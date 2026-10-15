@@ -92,7 +92,7 @@ public class MissaoUsuarioDAO {
     }
 
     public MissaoUsuarioTO update(MissaoUsuarioTO missaoUsuario) {
-        String sql = "update MISSOES_USUARIO set status=?, data_realizacao=?, id_usuario=?, id_missao=?, data_inicio=?, data_fim=? where id_missao_usuario=?";
+        String sql = "update MISSOES_USUARIO set status=?, data_realizacao=?, id_usuario=?, id_missao=?, data_inicio=?, data_fim=? where id_missao_usuario=? and data_realizacao is null";
         try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
             ps.setString(1, missaoUsuario.getStatus());
             ps.setDate(2, missaoUsuario.getDataRealizacao() != null
@@ -118,7 +118,7 @@ public class MissaoUsuarioDAO {
     }
 
     public boolean delete(Long id) {
-        String sql = "delete from MISSOES_USUARIO where id_missao_usuario = ?";
+        String sql = "delete from MISSOES_USUARIO where id_missao_usuario = ? and data_realizacao is null";
         try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
             ps.setLong(1, id);
             return ps.executeUpdate() > 0;

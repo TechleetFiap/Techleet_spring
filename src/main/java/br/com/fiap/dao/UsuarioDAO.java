@@ -30,7 +30,6 @@ public class UsuarioDAO {
             }
         } catch (SQLException e) {
             System.out.println("Erro ao listar: " + e.getMessage());
-            return null;
         } finally {
             ConnectionFactory.closeConnection();
         }
@@ -56,7 +55,6 @@ public class UsuarioDAO {
             }
         } catch (SQLException e) {
             System.out.println("Erro ao buscar: " + e.getMessage());
-            return null;
         } finally {
             ConnectionFactory.closeConnection();
         }
@@ -125,14 +123,13 @@ public class UsuarioDAO {
     }
 
     public UsuarioTO update(UsuarioTO usuario) {
-        String sql = "update USUARIOS set nome=?, email=?, senha=?, data_nascimento=?, pontos=? where id_usuario=?";
+        String sql = "update USUARIOS set nome=?, email=?, senha=?, data_nascimento=? where id_usuario=?";
         try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
             ps.setString(1, usuario.getNome());
             ps.setString(2, usuario.getEmail());
             ps.setString(3, usuario.getSenha());
             ps.setDate(4, Date.valueOf(usuario.getDataNascimento()));
-            ps.setInt(5, usuario.getPontos());
-            ps.setLong(6, usuario.getId());
+            ps.setLong(5, usuario.getId());
             if (ps.executeUpdate() > 0) {
                 return usuario;
             } else {

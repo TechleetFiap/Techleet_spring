@@ -47,7 +47,7 @@ public class CodigoResource {
         try {
             CodigoTO resultado = codigoBO.save(codigo);
             if (resultado == null) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao salvar codigo!");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar codigo!");
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
         } catch (Exception e) {
@@ -60,6 +60,9 @@ public class CodigoResource {
         try {
             codigo.setId(id);
             CodigoTO resultado = codigoBO.update(codigo);
+            if (resultado == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar codigo");
+            }
             return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar codigo");

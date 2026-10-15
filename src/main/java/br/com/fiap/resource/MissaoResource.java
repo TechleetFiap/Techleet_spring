@@ -40,7 +40,7 @@ public class MissaoResource {
         try {
             MissaoTO resultado = missaoBO.save(missao);
             if (resultado == null) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao salvar missao!");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar missao!");
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(missao);
         } catch (Exception e) {
@@ -53,6 +53,9 @@ public class MissaoResource {
         try {
             missao.setId(id);
             MissaoTO resultado = missaoBO.update(missao);
+            if (resultado == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar missao");
+            }
             return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar missao");

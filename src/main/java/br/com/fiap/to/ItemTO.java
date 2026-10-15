@@ -11,12 +11,12 @@ public class ItemTO {
     @Size(max = 80)
     private String nome;
     @NotBlank
-    @Pattern(regexp = " *(CABELO|ROUPA DE CIMA INTERNA|ROUPA DE CIMA EXTERNA|ROUPA DE BAIXO|CALCADO|ACESSORIO) *", flags = Pattern.Flag.CASE_INSENSITIVE)
+    @Pattern(regexp = " *(CABELO|ROUPA DE CIMA INTERNA|ROUPA DE CIMA EXTERNA|ROUPA DE BAIXO|CALCADO|ACESSORIO) *")
     private String modelo;
     @PositiveOrZero
     private Integer valorPontos;
     @NotBlank
-    @Pattern(regexp = " *(NORMAL|EXCLUSIVO) *", flags = Pattern.Flag.CASE_INSENSITIVE)
+    @Pattern(regexp = " *(NORMAL|EXCLUSIVO) *")
     private String tipo;
 
     public ItemTO() {

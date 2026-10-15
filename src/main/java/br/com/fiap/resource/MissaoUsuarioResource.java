@@ -40,7 +40,7 @@ public class MissaoUsuarioResource {
         try {
             MissaoUsuarioTO resultado = missaoUsuarioBO.save(missaoUsuario);
             if (resultado == null) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao salvar missaoUsuario!");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar missaoUsuario!");
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(missaoUsuario);
         } catch (Exception e) {
@@ -53,6 +53,9 @@ public class MissaoUsuarioResource {
         try {
             missaoUsuario.setId(id);
             MissaoUsuarioTO resultado = missaoUsuarioBO.update(missaoUsuario);
+            if (resultado == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar missaoUsuario");
+            }
             return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar missaoUsuario");

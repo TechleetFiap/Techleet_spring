@@ -36,7 +36,11 @@ public class UsuarioBO {
             }
         }
 
-        return usuarioDAO.save(usuario);
+        UsuarioTO resultado = usuarioDAO.save(usuario);
+        if (resultado == null) {
+            return null;
+        }
+        return usuarioDAO.findByEmail(usuario.getEmail());
     }
 
     public UsuarioTO login(UsuarioTO login) {
@@ -56,6 +60,31 @@ public class UsuarioBO {
     public UsuarioTO update(UsuarioTO usuario) {
         usuarioDAO = new UsuarioDAO();
 
+        if (usuario == null || usuario.getId() == null) {
+            throw new RuntimeException("ID do usuário é obrigatório.");
+        }
+        if (usuario.getEmail() == null || usuario.getEmail().isBlank()) {
+            throw new RuntimeException("E-mail é obrigatório.");
+        }
+
+        UsuarioTO atual = usuarioDAO.findById(usuario.getId());
+        if (atual == null || atual.getId() == null) {
+            throw new RuntimeException("Usuário não encontrado.");
+        }
+
+        usuario.setEmail(usuario.getEmail().trim());
+        ArrayList<UsuarioTO> usuarios = usuarioDAO.findAll();
+        if (usuarios == null) {
+            throw new RuntimeException("Não foi possível verificar o e-mail.");
+        }
+        for (UsuarioTO cadastrado : usuarios) {
+            if (!cadastrado.getId().equals(usuario.getId())
+                    && cadastrado.getEmail().equalsIgnoreCase(usuario.getEmail())) {
+                throw new RuntimeException("E-mail já cadastrado.");
+            }
+        }
+
+        usuario.setPontos(atual.getPontos());
         return usuarioDAO.update(usuario);
     }
 

@@ -3,6 +3,7 @@ package br.com.fiap.bo;
 import br.com.fiap.dao.ParceriaDAO;
 import br.com.fiap.to.ParceriaTO;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class ParceriaBO {
@@ -11,27 +12,90 @@ public class ParceriaBO {
 
     public ArrayList<ParceriaTO> findAll() {
         parceriaDAO = new ParceriaDAO();
-        // aqui se implementa a regra de negocio
-        return parceriaDAO.findAll();
+        ArrayList<ParceriaTO> parcerias = parceriaDAO.findAll();
+        if (parcerias != null) {
+            for (ParceriaTO parceria : parcerias) {
+                if (parceria.getDataFim() != null && parceria.getDataFim().isBefore(LocalDate.now())) {
+                    parceria.setStatus("INATIVA");
+                }
+            }
+        }
+        return parcerias;
     }
 
     public ParceriaTO findById(Long id) {
         parceriaDAO = new ParceriaDAO();
-        // aqui se implementa a regra de negocio
-        return parceriaDAO.findById(id);
+        ParceriaTO parceria = parceriaDAO.findById(id);
+        if (parceria != null && parceria.getDataFim() != null
+                && parceria.getDataFim().isBefore(LocalDate.now())) {
+            parceria.setStatus("INATIVA");
+        }
+        return parceria;
     }
 
 
-    public ParceriaTO save (ParceriaTO parceria) {
+    public ParceriaTO save(ParceriaTO parceria) {
         parceriaDAO = new ParceriaDAO();
-        // aqui se implementa a regra de negocio
-
+        if (parceria == null || parceria.getNome() == null || parceria.getNome().isBlank()
+                || parceria.getTipo() == null || parceria.getCustoMensal() == null
+                || parceria.getCustoMensal().signum() < 0) {
+            throw new RuntimeException("Informe nome, tipo e custo mensal válido da parceria.");
+        }
+        if (parceria.getDataInicio() == null) {
+            parceria.setDataInicio(LocalDate.now());
+        }
+        if (parceria.getStatus() == null) {
+            parceria.setStatus("ATIVA");
+        }
+        if (!"INFLUENCER".equals(parceria.getTipo()) && !"MARCA".equals(parceria.getTipo())) {
+            throw new RuntimeException("Tipo de parceria inválido.");
+        }
+        if (!"ATIVA".equals(parceria.getStatus()) && !"INATIVA".equals(parceria.getStatus())) {
+            throw new RuntimeException("Status de parceria inválido.");
+        }
+        if (parceria.getDataFim() != null && parceria.getDataFim().isBefore(parceria.getDataInicio())) {
+            throw new RuntimeException("A data final da parceria não pode ser anterior à inicial.");
+        }
+        if (parceria.getDataFim() != null && parceria.getDataFim().isBefore(LocalDate.now())) {
+            parceria.setStatus("INATIVA");
+        }
+        parceria.setNome(parceria.getNome().trim());
         return parceriaDAO.save(parceria);
     }
 
     public ParceriaTO update(ParceriaTO parceria) {
         parceriaDAO = new ParceriaDAO();
-
+        if (parceria == null || parceria.getNome() == null || parceria.getNome().isBlank()
+                || parceria.getTipo() == null || parceria.getCustoMensal() == null
+                || parceria.getCustoMensal().signum() < 0) {
+            throw new RuntimeException("Informe nome, tipo e custo mensal válido da parceria.");
+        }
+        if (parceria.getId() == null) {
+            throw new RuntimeException("ID da parceria é obrigatório.");
+        }
+        ParceriaTO atual = parceriaDAO.findById(parceria.getId());
+        if (atual == null || atual.getId() == null) {
+            throw new RuntimeException("Parceria não encontrada.");
+        }
+        if (parceria.getDataInicio() == null) {
+            parceria.setDataInicio(atual.getDataInicio());
+        }
+        if (parceria.getStatus() == null) {
+            parceria.setStatus(atual.getStatus());
+        }
+        if (!"INFLUENCER".equals(parceria.getTipo()) && !"MARCA".equals(parceria.getTipo())) {
+            throw new RuntimeException("Tipo de parceria inválido.");
+        }
+        if (!"ATIVA".equals(parceria.getStatus()) && !"INATIVA".equals(parceria.getStatus())) {
+            throw new RuntimeException("Status de parceria inválido.");
+        }
+        if (parceria.getDataFim() != null && parceria.getDataFim().isBefore(parceria.getDataInicio())) {
+            throw new RuntimeException("A data final da parceria não pode ser anterior à inicial.");
+        }
+        if (parceria.getDataFim() != null && parceria.getDataFim().isBefore(LocalDate.now())) {
+            parceria.setStatus("INATIVA");
+        }
+        parceria.setNome(parceria.getNome().trim());
         return parceriaDAO.update(parceria);
     }
 

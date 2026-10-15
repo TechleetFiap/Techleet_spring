@@ -40,9 +40,9 @@ public class UsuarioResource {
         try {
             UsuarioTO resultado = usuarioBO.save(usuario);
             if (resultado == null) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao salvar usuario!");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar usuario!");
             }
-            return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
+            return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar usuario");
         }
@@ -57,7 +57,7 @@ public class UsuarioResource {
             }
             return ResponseEntity.status(HttpStatus.OK).body(usuario);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao realizar login.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao realizar login.");
         }
     }
 
@@ -66,6 +66,9 @@ public class UsuarioResource {
         try {
             usuario.setId(id);
             UsuarioTO resultado = usuarioBO.update(usuario);
+            if (resultado == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar usuario");
+            }
             return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar usuario");

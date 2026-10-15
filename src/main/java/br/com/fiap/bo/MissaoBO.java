@@ -22,16 +22,38 @@ public class MissaoBO {
     }
 
 
-    public MissaoTO save (MissaoTO missao) {
+    public MissaoTO save(MissaoTO missao) {
         missaoDAO = new MissaoDAO();
-        // aqui se implementa a regra de negocio
-
+        if (missao == null || missao.getTitulo() == null || missao.getTitulo().isBlank()
+                || missao.getDescricao() == null || missao.getDescricao().isBlank()
+                || missao.getPontos() < 0) {
+            throw new RuntimeException("Informe título, descrição e pontos válidos da missão.");
+        }
+        if (!"DIARIA".equals(missao.getTipo()) && !"SEMANAL".equals(missao.getTipo())
+                && !"ESPECIAL".equals(missao.getTipo())) {
+            throw new RuntimeException("Tipo de missão inválido.");
+        }
         return missaoDAO.save(missao);
     }
 
     public MissaoTO update(MissaoTO missao) {
         missaoDAO = new MissaoDAO();
-
+        if (missao == null || missao.getTitulo() == null || missao.getTitulo().isBlank()
+                || missao.getDescricao() == null || missao.getDescricao().isBlank()
+                || missao.getPontos() < 0) {
+            throw new RuntimeException("Informe título, descrição e pontos válidos da missão.");
+        }
+        if (!"DIARIA".equals(missao.getTipo()) && !"SEMANAL".equals(missao.getTipo())
+                && !"ESPECIAL".equals(missao.getTipo())) {
+            throw new RuntimeException("Tipo de missão inválido.");
+        }
+        if (missao.getId() == null) {
+            throw new RuntimeException("Missão não encontrada.");
+        }
+        MissaoTO atual = missaoDAO.findById(missao.getId());
+        if (atual == null || atual.getId() == null) {
+            throw new RuntimeException("Missão não encontrada.");
+        }
         return missaoDAO.update(missao);
     }
 
