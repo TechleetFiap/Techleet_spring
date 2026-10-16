@@ -1,5 +1,6 @@
 package br.com.fiap.resource;
 
+import br.com.fiap.exception.RegraNegocioException;
 import br.com.fiap.bo.MissaoBO;
 import br.com.fiap.to.MissaoTO;
 import jakarta.validation.Valid;
@@ -43,6 +44,8 @@ public class MissaoResource {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar missao!");
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(missao);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar missao");
         }
@@ -57,6 +60,8 @@ public class MissaoResource {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar missao");
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar missao");
         }

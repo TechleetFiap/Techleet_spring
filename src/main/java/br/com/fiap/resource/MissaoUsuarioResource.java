@@ -1,5 +1,6 @@
 package br.com.fiap.resource;
 
+import br.com.fiap.exception.RegraNegocioException;
 import br.com.fiap.bo.MissaoUsuarioBO;
 import br.com.fiap.to.MissaoUsuarioTO;
 import jakarta.validation.Valid;
@@ -43,6 +44,8 @@ public class MissaoUsuarioResource {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar missaoUsuario!");
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(missaoUsuario);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar missaoUsuario");
         }
@@ -57,6 +60,8 @@ public class MissaoUsuarioResource {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar missaoUsuario");
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar missaoUsuario");
         }
@@ -70,6 +75,8 @@ public class MissaoUsuarioResource {
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("MissaoUsuario não encontrado");
             }
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

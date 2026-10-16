@@ -1,5 +1,6 @@
 package br.com.fiap.resource;
 
+import br.com.fiap.exception.RegraNegocioException;
 import br.com.fiap.bo.AvatarBO;
 import br.com.fiap.to.AvatarTO;
 import jakarta.validation.Valid;
@@ -43,6 +44,8 @@ public class AvatarResource {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar avatar!");
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar avatar");
         }
@@ -58,6 +61,8 @@ public class AvatarResource {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar avatar");
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar avatar");
         }

@@ -1,5 +1,9 @@
 package br.com.fiap.bo;
 
+import br.com.fiap.exception.PersistenciaException;
+import br.com.fiap.exception.RegistroDuplicadoException;
+import br.com.fiap.exception.RegistroNaoEncontradoException;
+import br.com.fiap.exception.RegraNegocioException;
 import br.com.fiap.dao.MissaoUsuarioDAO;
 import br.com.fiap.to.MissaoUsuarioTO;
 
@@ -42,35 +46,35 @@ public class MissaoUsuarioBO {
         missaoUsuarioDAO = new MissaoUsuarioDAO();
         if (missaoUsuario == null || missaoUsuario.getIdUsuario() == null
                 || missaoUsuario.getIdMissao() == null || missaoUsuario.getDataFim() == null) {
-            throw new RuntimeException("Usuário, missão e data final são obrigatórios.");
+            throw new RegraNegocioException("Usuário, missão e data final são obrigatórios.");
         }
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         MissaoDAO missaoDAO = new MissaoDAO();
         UsuarioTO usuario = usuarioDAO.findById(missaoUsuario.getIdUsuario());
         MissaoTO missao = missaoDAO.findById(missaoUsuario.getIdMissao());
         if (usuario == null || usuario.getId() == null || missao == null || missao.getId() == null) {
-            throw new RuntimeException("Usuário ou missão não encontrado.");
+            throw new RegistroNaoEncontradoException("Usuário ou missão não encontrado.");
         }
         if (missaoUsuario.getDataInicio() == null) {
             missaoUsuario.setDataInicio(LocalDate.now());
         }
         if (missaoUsuario.getDataFim().isBefore(missaoUsuario.getDataInicio())
                 || missaoUsuario.getDataFim().isBefore(LocalDate.now())) {
-            throw new RuntimeException("Período da missão inválido.");
+            throw new RegraNegocioException("Período da missão inválido.");
         }
         if (missaoUsuario.getDataRealizacao() != null) {
-            throw new RuntimeException("Cadastre a missão antes de concluí-la pelo update.");
+            throw new RegraNegocioException("Cadastre a missão antes de concluí-la pelo update.");
         }
         ArrayList<MissaoUsuarioTO> missoes = missaoUsuarioDAO.findAll();
         if (missoes == null) {
-            throw new RuntimeException("Não foi possível consultar as missões do usuário.");
+            throw new PersistenciaException("Não foi possível consultar as missões do usuário.");
         }
         for (MissaoUsuarioTO cadastrada : missoes) {
             if (cadastrada.getIdUsuario().equals(missaoUsuario.getIdUsuario())
                     && cadastrada.getIdMissao().equals(missaoUsuario.getIdMissao())
                     && !missaoUsuario.getDataInicio().isAfter(cadastrada.getDataFim())
                     && !missaoUsuario.getDataFim().isBefore(cadastrada.getDataInicio())) {
-                throw new RuntimeException("Usuário já possui esta missão nesse período.");
+                throw new RegistroDuplicadoException("Usuário já possui esta missão nesse período.");
             }
         }
         missaoUsuario.setStatus("DISPONIVEL");
@@ -80,11 +84,11 @@ public class MissaoUsuarioBO {
     public MissaoUsuarioTO update(MissaoUsuarioTO missaoUsuario) {
         missaoUsuarioDAO = new MissaoUsuarioDAO();
         if (missaoUsuario == null || missaoUsuario.getId() == null) {
-            throw new RuntimeException("ID da missão do usuário é obrigatório.");
+            throw new RegraNegocioException("ID da missão do usuário é obrigatório.");
         }
         MissaoUsuarioTO atual = missaoUsuarioDAO.findById(missaoUsuario.getId());
         if (atual == null || atual.getId() == null) {
-            throw new RuntimeException("Missão do usuário não encontrada.");
+            throw new RegistroNaoEncontradoException("Missão do usuário não encontrada.");
         }
         if (!atual.getIdUsuario().equals(missaoUsuario.getIdUsuario())
                 || !atual.getIdMissao().equals(missaoUsuario.getIdMissao())
@@ -92,16 +96,16 @@ public class MissaoUsuarioBO {
                 && !atual.getDataInicio().equals(missaoUsuario.getDataInicio()))
                 || (missaoUsuario.getDataFim() != null
                 && !atual.getDataFim().equals(missaoUsuario.getDataFim()))) {
-            throw new RuntimeException("Não é permitido trocar o usuário, a missão ou o período cadastrado.");
+            throw new RegraNegocioException("Não é permitido trocar o usuário, a missão ou o período cadastrado.");
         }
         if (atual.getDataRealizacao() != null) {
-            throw new RuntimeException("Missão já concluída.");
+            throw new RegraNegocioException("Missão já concluída.");
         }
         LocalDate hoje = LocalDate.now();
         boolean concluir = missaoUsuario.getDataRealizacao() != null;
         if (concluir && (hoje.isBefore(atual.getDataInicio()) || hoje.isAfter(atual.getDataFim())
                 || !"DISPONIVEL".equals(atual.getStatus()))) {
-            throw new RuntimeException("A missão não está disponível para conclusão.");
+            throw new RegraNegocioException("A missão não está disponível para conclusão.");
         }
         missaoUsuario.setDataInicio(atual.getDataInicio());
         missaoUsuario.setDataFim(atual.getDataFim());
@@ -115,12 +119,12 @@ public class MissaoUsuarioBO {
         UsuarioTO usuario = usuarioDAO.findById(atual.getIdUsuario());
         if (usuario == null || usuario.getId() == null || missao == null
                 || missao.getId() == null || missao.getPontos() < 0) {
-            throw new RuntimeException("Usuário ou missão inválido para receber os pontos.");
+            throw new RegraNegocioException("Usuário ou missão inválido para receber os pontos.");
         }
         missaoUsuario.setDataRealizacao(hoje);
         int pontos = missao.getPontos();
         if (!usuarioDAO.alterarPontos(atual.getIdUsuario(), pontos)) {
-            throw new RuntimeException("Não foi possível creditar os pontos da missão.");
+            throw new PersistenciaException("Não foi possível creditar os pontos da missão.");
         }
         MissaoUsuarioTO resultado = null;
         try {
@@ -128,7 +132,7 @@ public class MissaoUsuarioBO {
             return resultado;
         } finally {
             if (resultado == null && !usuarioDAO.alterarPontos(atual.getIdUsuario(), -pontos)) {
-                throw new RuntimeException("A conclusão falhou e não foi possível estornar os pontos.");
+                throw new PersistenciaException("A conclusão falhou e não foi possível estornar os pontos.");
             }
         }
     }
@@ -140,7 +144,7 @@ public class MissaoUsuarioBO {
             return false;
         }
         if (atual.getDataRealizacao() != null) {
-            throw new RuntimeException("Não é permitido excluir uma missão já concluída.");
+            throw new RegraNegocioException("Não é permitido excluir uma missão já concluída.");
         }
         return missaoUsuarioDAO.delete(id);
     }

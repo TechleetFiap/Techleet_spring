@@ -1,5 +1,6 @@
 package br.com.fiap.resource;
 
+import br.com.fiap.exception.RegraNegocioException;
 import br.com.fiap.bo.ParceriaBO;
 import br.com.fiap.to.ParceriaTO;
 import jakarta.validation.Valid;
@@ -43,6 +44,8 @@ public class ParceriaResource {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar parceria!");
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(parceria);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar parceria");
         }
@@ -57,6 +60,8 @@ public class ParceriaResource {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar parceria");
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar parceria");
         }

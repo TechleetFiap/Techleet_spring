@@ -1,5 +1,7 @@
 package br.com.fiap.resource;
 
+import br.com.fiap.exception.RegraNegocioException;
+import br.com.fiap.exception.PersistenciaException;
 import br.com.fiap.bo.UsuarioBO;
 import br.com.fiap.to.UsuarioTO;
 import jakarta.validation.Valid;
@@ -43,6 +45,8 @@ public class UsuarioResource {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar usuario!");
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar usuario");
         }
@@ -56,6 +60,8 @@ public class UsuarioResource {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("E-mail ou senha inválidos.");
             }
             return ResponseEntity.status(HttpStatus.OK).body(usuario);
+        } catch (PersistenciaException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao realizar login.");
         }
@@ -70,6 +76,8 @@ public class UsuarioResource {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar usuario");
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar usuario");
         }

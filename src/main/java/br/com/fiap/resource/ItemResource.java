@@ -1,5 +1,6 @@
 package br.com.fiap.resource;
 
+import br.com.fiap.exception.RegraNegocioException;
 import br.com.fiap.bo.ItemBO;
 import br.com.fiap.to.ItemTO;
 import jakarta.validation.Valid;
@@ -50,6 +51,8 @@ public class ItemResource {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar item!");
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Erro ao salvar");
         }
@@ -64,6 +67,8 @@ public class ItemResource {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar item");
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao salvar item");
         }

@@ -1,5 +1,7 @@
 package br.com.fiap.bo;
 
+import br.com.fiap.exception.RegistroNaoEncontradoException;
+import br.com.fiap.exception.RegraNegocioException;
 import br.com.fiap.dao.MissaoDAO;
 import br.com.fiap.to.MissaoTO;
 
@@ -27,11 +29,11 @@ public class MissaoBO {
         if (missao == null || missao.getTitulo() == null || missao.getTitulo().isBlank()
                 || missao.getDescricao() == null || missao.getDescricao().isBlank()
                 || missao.getPontos() < 0) {
-            throw new RuntimeException("Informe título, descrição e pontos válidos da missão.");
+            throw new RegraNegocioException("Informe título, descrição e pontos válidos da missão.");
         }
         if (!"DIARIA".equals(missao.getTipo()) && !"SEMANAL".equals(missao.getTipo())
                 && !"ESPECIAL".equals(missao.getTipo())) {
-            throw new RuntimeException("Tipo de missão inválido.");
+            throw new RegraNegocioException("Tipo de missão inválido.");
         }
         return missaoDAO.save(missao);
     }
@@ -41,18 +43,18 @@ public class MissaoBO {
         if (missao == null || missao.getTitulo() == null || missao.getTitulo().isBlank()
                 || missao.getDescricao() == null || missao.getDescricao().isBlank()
                 || missao.getPontos() < 0) {
-            throw new RuntimeException("Informe título, descrição e pontos válidos da missão.");
+            throw new RegraNegocioException("Informe título, descrição e pontos válidos da missão.");
         }
         if (!"DIARIA".equals(missao.getTipo()) && !"SEMANAL".equals(missao.getTipo())
                 && !"ESPECIAL".equals(missao.getTipo())) {
-            throw new RuntimeException("Tipo de missão inválido.");
+            throw new RegraNegocioException("Tipo de missão inválido.");
         }
         if (missao.getId() == null) {
-            throw new RuntimeException("Missão não encontrada.");
+            throw new RegistroNaoEncontradoException("Missão não encontrada.");
         }
         MissaoTO atual = missaoDAO.findById(missao.getId());
         if (atual == null || atual.getId() == null) {
-            throw new RuntimeException("Missão não encontrada.");
+            throw new RegistroNaoEncontradoException("Missão não encontrada.");
         }
         return missaoDAO.update(missao);
     }

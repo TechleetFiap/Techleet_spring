@@ -1,5 +1,6 @@
 package br.com.fiap.dao;
 
+import br.com.fiap.exception.PersistenciaException;
 import br.com.fiap.to.UsuarioTO;
 
 import java.sql.Date;
@@ -79,7 +80,7 @@ public class UsuarioDAO {
             }
         } catch (SQLException e) {
             System.out.println("Erro ao buscar por e-mail: " + e.getMessage());
-            throw new RuntimeException("Erro ao consultar usuário para login.", e);
+            throw new PersistenciaException("Erro ao consultar usuário para login.", e);
         } finally {
             ConnectionFactory.closeConnection();
         }

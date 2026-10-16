@@ -1,5 +1,9 @@
 package br.com.fiap.bo;
 
+import br.com.fiap.exception.PersistenciaException;
+import br.com.fiap.exception.RegistroDuplicadoException;
+import br.com.fiap.exception.RegistroNaoEncontradoException;
+import br.com.fiap.exception.RegraNegocioException;
 import br.com.fiap.dao.AvatarDAO;
 import br.com.fiap.to.AvatarTO;
 
@@ -32,26 +36,26 @@ public class AvatarBO {
         avatarDAO = new AvatarDAO();
         if (avatar == null || avatar.getIdUsuario() == null
                 || avatar.getNome() == null || avatar.getNome().isBlank()) {
-            throw new RuntimeException("Nome e usuário do avatar são obrigatórios.");
+            throw new RegraNegocioException("Nome e usuário do avatar são obrigatórios.");
         }
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         UsuarioTO usuario = usuarioDAO.findById(avatar.getIdUsuario());
         if (usuario == null || usuario.getId() == null) {
-            throw new RuntimeException("Usuário não encontrado.");
+            throw new RegistroNaoEncontradoException("Usuário não encontrado.");
         }
         ArrayList<AvatarTO> avatares = avatarDAO.findAll();
         if (avatares == null) {
-            throw new RuntimeException("Não foi possível consultar os avatares.");
+            throw new PersistenciaException("Não foi possível consultar os avatares.");
         }
         for (AvatarTO cadastrado : avatares) {
             if (cadastrado.getIdUsuario().equals(avatar.getIdUsuario())) {
-                throw new RuntimeException("Usuário já possui um avatar.");
+                throw new RegistroDuplicadoException("Usuário já possui um avatar.");
             }
         }
         InventarioDAO inventarioDAO = new InventarioDAO();
         ArrayList<InventarioTO> inventarios = inventarioDAO.findAll();
         if (inventarios == null) {
-            throw new RuntimeException("Não foi possível consultar o inventário.");
+            throw new PersistenciaException("Não foi possível consultar o inventário.");
         }
         Long[] ids = {avatar.getIdCabelo(), avatar.getIdRoupaCimaInt(), avatar.getIdRoupaCimaExt(),
                 avatar.getIdRoupaBaixo(), avatar.getIdCalcado(), avatar.getIdAcessorio()};
@@ -60,11 +64,11 @@ public class AvatarBO {
         ItemDAO itemDAO = new ItemDAO();
         for (int i = 0; i < ids.length; i++) {
             if (ids[i] == null) {
-                throw new RuntimeException("Todos os itens do avatar são obrigatórios.");
+                throw new RegraNegocioException("Todos os itens do avatar são obrigatórios.");
             }
             ItemTO item = itemDAO.findById(ids[i]);
             if (item == null || item.getId() == null || !item.verificarCompatibilidade(modelos[i])) {
-                throw new RuntimeException("Item incompatível com a posição " + modelos[i] + ".");
+                throw new RegraNegocioException("Item incompatível com a posição " + modelos[i] + ".");
             }
             boolean possui = false;
             for (InventarioTO inventario : inventarios) {
@@ -75,7 +79,7 @@ public class AvatarBO {
                 }
             }
             if (!possui) {
-                throw new RuntimeException("Usuário não possui o item para " + modelos[i] + ".");
+                throw new RegraNegocioException("Usuário não possui o item para " + modelos[i] + ".");
             }
         }
         avatar.setNome(avatar.getNome().trim());
@@ -86,37 +90,37 @@ public class AvatarBO {
         avatarDAO = new AvatarDAO();
         if (avatar == null || avatar.getIdUsuario() == null
                 || avatar.getNome() == null || avatar.getNome().isBlank()) {
-            throw new RuntimeException("Nome e usuário do avatar são obrigatórios.");
+            throw new RegraNegocioException("Nome e usuário do avatar são obrigatórios.");
         }
         if (avatar.getId() == null) {
-            throw new RuntimeException("ID do avatar é obrigatório.");
+            throw new RegraNegocioException("ID do avatar é obrigatório.");
         }
         AvatarTO atual = avatarDAO.findById(avatar.getId());
         if (atual == null || atual.getId() == null) {
-            throw new RuntimeException("Avatar não encontrado.");
+            throw new RegistroNaoEncontradoException("Avatar não encontrado.");
         }
         if (!atual.getIdUsuario().equals(avatar.getIdUsuario())) {
-            throw new RuntimeException("Não é permitido trocar o usuário do avatar.");
+            throw new RegraNegocioException("Não é permitido trocar o usuário do avatar.");
         }
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         UsuarioTO usuario = usuarioDAO.findById(avatar.getIdUsuario());
         if (usuario == null || usuario.getId() == null) {
-            throw new RuntimeException("Usuário não encontrado.");
+            throw new RegistroNaoEncontradoException("Usuário não encontrado.");
         }
         ArrayList<AvatarTO> avatares = avatarDAO.findAll();
         if (avatares == null) {
-            throw new RuntimeException("Não foi possível consultar os avatares.");
+            throw new PersistenciaException("Não foi possível consultar os avatares.");
         }
         for (AvatarTO cadastrado : avatares) {
             if (cadastrado.getIdUsuario().equals(avatar.getIdUsuario())
                     && !cadastrado.getId().equals(avatar.getId())) {
-                throw new RuntimeException("Usuário já possui um avatar.");
+                throw new RegistroDuplicadoException("Usuário já possui um avatar.");
             }
         }
         InventarioDAO inventarioDAO = new InventarioDAO();
         ArrayList<InventarioTO> inventarios = inventarioDAO.findAll();
         if (inventarios == null) {
-            throw new RuntimeException("Não foi possível consultar o inventário.");
+            throw new PersistenciaException("Não foi possível consultar o inventário.");
         }
         Long[] ids = {avatar.getIdCabelo(), avatar.getIdRoupaCimaInt(), avatar.getIdRoupaCimaExt(),
                 avatar.getIdRoupaBaixo(), avatar.getIdCalcado(), avatar.getIdAcessorio()};
@@ -125,11 +129,11 @@ public class AvatarBO {
         ItemDAO itemDAO = new ItemDAO();
         for (int i = 0; i < ids.length; i++) {
             if (ids[i] == null) {
-                throw new RuntimeException("Todos os itens do avatar são obrigatórios.");
+                throw new RegraNegocioException("Todos os itens do avatar são obrigatórios.");
             }
             ItemTO item = itemDAO.findById(ids[i]);
             if (item == null || item.getId() == null || !item.verificarCompatibilidade(modelos[i])) {
-                throw new RuntimeException("Item incompatível com a posição " + modelos[i] + ".");
+                throw new RegraNegocioException("Item incompatível com a posição " + modelos[i] + ".");
             }
             boolean possui = false;
             for (InventarioTO inventario : inventarios) {
@@ -140,7 +144,7 @@ public class AvatarBO {
                 }
             }
             if (!possui) {
-                throw new RuntimeException("Usuário não possui o item para " + modelos[i] + ".");
+                throw new RegraNegocioException("Usuário não possui o item para " + modelos[i] + ".");
             }
         }
         avatar.setNome(avatar.getNome().trim());

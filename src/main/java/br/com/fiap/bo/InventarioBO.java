@@ -1,5 +1,9 @@
 package br.com.fiap.bo;
 
+import br.com.fiap.exception.PersistenciaException;
+import br.com.fiap.exception.RegistroDuplicadoException;
+import br.com.fiap.exception.RegistroNaoEncontradoException;
+import br.com.fiap.exception.RegraNegocioException;
 import br.com.fiap.dao.InventarioDAO;
 import br.com.fiap.dao.ItemDAO;
 import br.com.fiap.dao.UsuarioDAO;
@@ -32,41 +36,41 @@ public class InventarioBO {
     public InventarioTO save(InventarioTO inventarioTO) {
         inventarioDAO = new InventarioDAO();
         if (inventarioTO == null || inventarioTO.getIdUsuario() == null || inventarioTO.getIdItem() == null) {
-            throw new RuntimeException("Usuário e item são obrigatórios.");
+            throw new RegraNegocioException("Usuário e item são obrigatórios.");
         }
         if (!"COMPRA".equals(inventarioTO.getOrigem())) {
-            throw new RuntimeException("A aquisição de itens está disponível apenas por compra.");
+            throw new RegraNegocioException("A aquisição de itens está disponível apenas por compra.");
         }
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         UsuarioTO usuario = usuarioDAO.findById(inventarioTO.getIdUsuario());
         if (usuario == null || usuario.getId() == null) {
-            throw new RuntimeException("Usuário não encontrado.");
+            throw new RegistroNaoEncontradoException("Usuário não encontrado.");
         }
         ItemDAO itemDAO = new ItemDAO();
         ItemTO item = itemDAO.findById(inventarioTO.getIdItem());
         if (item == null || item.getId() == null) {
-            throw new RuntimeException("Item não encontrado.");
+            throw new RegistroNaoEncontradoException("Item não encontrado.");
         }
         if (item.getValorPontos() == null || item.getValorPontos() < 0) {
-            throw new RuntimeException("Item sem preço válido para compra.");
+            throw new RegraNegocioException("Item sem preço válido para compra.");
         }
         ArrayList<InventarioTO> inventarios = inventarioDAO.findAll();
         if (inventarios == null) {
-            throw new RuntimeException("Não foi possível consultar o inventário.");
+            throw new PersistenciaException("Não foi possível consultar o inventário.");
         }
         for (InventarioTO cadastrado : inventarios) {
             if (cadastrado.getIdUsuario().equals(inventarioTO.getIdUsuario())
                     && cadastrado.getIdItem().equals(inventarioTO.getIdItem())) {
-                throw new RuntimeException("Usuário já possui este item.");
+                throw new RegistroDuplicadoException("Usuário já possui este item.");
             }
         }
         if (usuario.getPontos() < item.getValorPontos()) {
-            throw new RuntimeException("Pontos insuficientes para comprar o item.");
+            throw new RegraNegocioException("Pontos insuficientes para comprar o item.");
         }
         inventarioTO.setDataAquisicao(LocalDate.now());
         int valorPontos = item.getValorPontos();
         if (!usuarioDAO.alterarPontos(usuario.getId(), -valorPontos)) {
-            throw new RuntimeException("Não foi possível descontar os pontos da compra.");
+            throw new PersistenciaException("Não foi possível descontar os pontos da compra.");
         }
         InventarioTO resultado = null;
         try {
@@ -74,7 +78,7 @@ public class InventarioBO {
             return resultado;
         } finally {
             if (resultado == null && !usuarioDAO.alterarPontos(usuario.getId(), valorPontos)) {
-                throw new RuntimeException("A compra falhou e não foi possível devolver os pontos.");
+                throw new PersistenciaException("A compra falhou e não foi possível devolver os pontos.");
             }
         }
     }
@@ -82,18 +86,18 @@ public class InventarioBO {
     public InventarioTO update(InventarioTO inventario) {
         inventarioDAO = new InventarioDAO();
         if (inventario == null || inventario.getId() == null) {
-            throw new RuntimeException("ID do inventário é obrigatório.");
+            throw new RegraNegocioException("ID do inventário é obrigatório.");
         }
         InventarioTO atual = inventarioDAO.findById(inventario.getId());
         if (atual == null || atual.getId() == null) {
-            throw new RuntimeException("Registro do inventário não encontrado.");
+            throw new RegistroNaoEncontradoException("Registro do inventário não encontrado.");
         }
         if (!atual.getIdUsuario().equals(inventario.getIdUsuario())
                 || !atual.getIdItem().equals(inventario.getIdItem())
                 || !atual.getOrigem().equals(inventario.getOrigem())
                 || (inventario.getDataAquisicao() != null
                 && !atual.getDataAquisicao().equals(inventario.getDataAquisicao()))) {
-            throw new RuntimeException("Não é permitido alterar os dados de uma aquisição.");
+            throw new RegraNegocioException("Não é permitido alterar os dados de uma aquisição.");
         }
         return atual;
     }
@@ -107,7 +111,7 @@ public class InventarioBO {
         AvatarDAO avatarDAO = new AvatarDAO();
         ArrayList<AvatarTO> avatares = avatarDAO.findAll();
         if (avatares == null) {
-            throw new RuntimeException("Não foi possível consultar os avatares.");
+            throw new PersistenciaException("Não foi possível consultar os avatares.");
         }
         for (AvatarTO avatar : avatares) {
             if (atual.getIdUsuario().equals(avatar.getIdUsuario())
@@ -117,7 +121,7 @@ public class InventarioBO {
                     || atual.getIdItem().equals(avatar.getIdRoupaBaixo())
                     || atual.getIdItem().equals(avatar.getIdCalcado())
                     || atual.getIdItem().equals(avatar.getIdAcessorio()))) {
-                throw new RuntimeException("Não é permitido excluir um item equipado no avatar.");
+                throw new RegraNegocioException("Não é permitido excluir um item equipado no avatar.");
             }
         }
         return inventarioDAO.delete(id);

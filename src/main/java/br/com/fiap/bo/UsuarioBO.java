@@ -1,5 +1,9 @@
 package br.com.fiap.bo;
 
+import br.com.fiap.exception.PersistenciaException;
+import br.com.fiap.exception.RegistroDuplicadoException;
+import br.com.fiap.exception.RegistroNaoEncontradoException;
+import br.com.fiap.exception.RegraNegocioException;
 import br.com.fiap.dao.UsuarioDAO;
 import br.com.fiap.to.UsuarioTO;
 
@@ -28,11 +32,11 @@ public class UsuarioBO {
 
         ArrayList<UsuarioTO> usuarios = usuarioDAO.findAll();
         if (usuarios == null) {
-            throw new RuntimeException("Não foi possível verificar o e-mail.");
+            throw new PersistenciaException("Não foi possível verificar o e-mail.");
         }
         for (UsuarioTO cadastrado : usuarios) {
             if (cadastrado.getEmail().equalsIgnoreCase(usuario.getEmail())) {
-                throw new RuntimeException("E-mail já cadastrado.");
+                throw new RegistroDuplicadoException("E-mail já cadastrado.");
             }
         }
 
@@ -61,26 +65,26 @@ public class UsuarioBO {
         usuarioDAO = new UsuarioDAO();
 
         if (usuario == null || usuario.getId() == null) {
-            throw new RuntimeException("ID do usuário é obrigatório.");
+            throw new RegraNegocioException("ID do usuário é obrigatório.");
         }
         if (usuario.getEmail() == null || usuario.getEmail().isBlank()) {
-            throw new RuntimeException("E-mail é obrigatório.");
+            throw new RegraNegocioException("E-mail é obrigatório.");
         }
 
         UsuarioTO atual = usuarioDAO.findById(usuario.getId());
         if (atual == null || atual.getId() == null) {
-            throw new RuntimeException("Usuário não encontrado.");
+            throw new RegistroNaoEncontradoException("Usuário não encontrado.");
         }
 
         usuario.setEmail(usuario.getEmail().trim());
         ArrayList<UsuarioTO> usuarios = usuarioDAO.findAll();
         if (usuarios == null) {
-            throw new RuntimeException("Não foi possível verificar o e-mail.");
+            throw new PersistenciaException("Não foi possível verificar o e-mail.");
         }
         for (UsuarioTO cadastrado : usuarios) {
             if (!cadastrado.getId().equals(usuario.getId())
                     && cadastrado.getEmail().equalsIgnoreCase(usuario.getEmail())) {
-                throw new RuntimeException("E-mail já cadastrado.");
+                throw new RegistroDuplicadoException("E-mail já cadastrado.");
             }
         }
 
