@@ -13,4 +13,4 @@ RUN chmod +x mvnw
 RUN ./mvnw -DoutputFile=target/mvn-dependency-list.log -B -DskipTests clean dependency:list install
 
 # Run the java app
-CMD ["sh", "-c", "java -jar target/megafarma-0.0.1-SNAPSHOT.jar"]
+CMD ["sh", "-c", "java -jar target/techleet-0.0.1-SNAPSHOT.jar"]
