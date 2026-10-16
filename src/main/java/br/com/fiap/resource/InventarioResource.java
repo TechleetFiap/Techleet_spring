@@ -71,10 +71,14 @@ public class InventarioResource {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
-        if (inventarioBO.delete(id)) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Inventario não encontrado");
+        try {
+            if (inventarioBO.delete(id)) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Inventario não encontrado");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 }

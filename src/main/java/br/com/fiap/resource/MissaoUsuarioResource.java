@@ -64,10 +64,14 @@ public class MissaoUsuarioResource {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
-        if (missaoUsuarioBO.delete(id)) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("MissaoUsuario não encontrado");
+        try {
+            if (missaoUsuarioBO.delete(id)) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("MissaoUsuario não encontrado");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 }
