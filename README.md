@@ -6,8 +6,8 @@ API REST desenvolvida em Java 21 com Spring Boot e persistência Oracle por JDBC
 
 ## Arquivos da entrega
 
+- [Código-fonte Java atualizado](src/main/java)
 - [Documentação final em PDF](Capa_SOUL_UP_Spring_4_Sprint.pdf)
-- [Projeto completo em ZIP](Techleet_spring_4_Sprint.zip)
 
 ## Links
 
